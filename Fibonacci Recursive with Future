@@ -1,0 +1,65 @@
+//  *******************
+//  Fibonacci.java
+//  ********************
+
+package futuredemo;
+import java.util.concurrent.RecursiveTask;
+
+class Fibonacci extends RecursiveTask<Integer> {
+	   final int n;
+	   Fibonacci(int n) { this.n = n; }
+	   protected Integer compute() {
+	     if (n <= 1)
+	       return n;
+	     Fibonacci f1 = new Fibonacci(n - 1);
+	     f1.fork();
+	     Fibonacci f2 = new Fibonacci(n - 2);
+	     return f2.compute() + f1.join();
+	   }	  
+	 }
+   
+ // ****************************************
+// Executing multiple tasks with Future 
+//InvokeFibonacci.java
+// ****************************************
+package futuredemo;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.*;
+
+public class InvokeFibonacci{
+	
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+        
+	        Callable<Integer>  task_1 = () -> {
+	            Thread.sleep(2000);
+	            Fibonacci fibonacci = new Fibonacci(10);
+	            return fibonacci.compute();
+	        };
+       
+	        Callable<Integer> task_2 = () -> {
+	            Thread.sleep(1000);
+	            Fibonacci fibonacci = new Fibonacci(20);
+	            return fibonacci.compute();
+	        };
+           
+	        Callable<Integer> task_3 = () -> {
+	            Thread.sleep(1000);
+	            Fibonacci fibonacci = new Fibonacci(30);
+	            return fibonacci.compute();
+	        };
+
+        List<Callable<Integer>> taskList = Arrays.asList(task_1,task_2,task_3);
+        
+        List<Future<Integer>> futures = executorService.invokeAll(taskList);
+
+        for(Future<Integer> future: futures) {
+            // The result is printed only after all the futures are complete. (i.e. after 5 seconds)
+            
+			System.out.println("Fibonacci "+future.get());
+            
+        }       
+        executorService.shutdown();
+    }
+}
