@@ -63,13 +63,13 @@ public class ListAllClassMusic implements Serializable {
   //HybridCache cache = new HybridCache(folder);
   while (queryResults.hasNext()) {
 	  QuerySolution sol = (QuerySolution) queryResults.next();
-	   RDFNode node = sol.get("class");	
+	 //  RDFNode node = sol.get("class");	
 	  System.out.println(sol.get("class"));
-     
-     FileOutputStream fos = null;
-     ObjectOutputStream out = null;
+  }
+     //FileOutputStream fos = null;
+     //ObjectOutputStream out = null;
      // Write to cache 
-     try {
+    /* try {
 		 fos = new FileOutputStream(filename);
     	 out = new ObjectOutputStream(fos);		
 		// out.writeObject(sol.get("class"));
@@ -80,8 +80,8 @@ public class ListAllClassMusic implements Serializable {
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-	}
+	}*/
    
-  }
+  //}
   }
 }
