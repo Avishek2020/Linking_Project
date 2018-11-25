@@ -1,0 +1,7 @@
+select ?instance ?label
+{ ?instance <http://www.w3.org/2000/01/rdf-schema#label> ?label{
+                         SELECT DISTINCT ?instance 
+         WHERE { ?instance a ?c } ORDER BY ?instance
+                         }
+  	
+}
