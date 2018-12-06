@@ -1,0 +1,4 @@
+SELECT ?p ?o where 
+{
+?s ?p ?o .
+?s a mo:MusicArtist}
