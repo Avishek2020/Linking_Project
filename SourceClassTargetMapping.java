@@ -32,7 +32,7 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-public class SourceClassTargetMapping {
+public class SourceClassTargetMapping3 {
 	private static String endpoint_sc = "http://dbtune.org/musicbrainz/sparql";
 	private static String endpoint_tc = "http://dbtune.org/magnatune/sparql";
 
@@ -62,7 +62,7 @@ public class SourceClassTargetMapping {
 
 		// Below Query Populates all Music Artist Classes
 
-		String QS = "SELECT DISTINCT ?class\r\n" + "WHERE { [] a ?class }\r\n" + "ORDER BY ?class\r\n" + "Limit 5";
+		String QS = "SELECT DISTINCT ?class\r\n" + "WHERE { [] a ?class }\r\n" + "ORDER BY ?class\r\n" ;
 
 		QueryExecution qexec_sc = QueryExecutionFactory.sparqlService(endpoint_sc, QS);
 
@@ -74,7 +74,7 @@ public class SourceClassTargetMapping {
 		while (classes_sc.hasNext()) {
 			QuerySolution musicclass_sc = classes_sc.next();
 
-			ParameterizedSparqlString pss_sc = new ParameterizedSparqlString("select ?s where {?s a ?class } limit 5");
+			ParameterizedSparqlString pss_sc = new ParameterizedSparqlString("select ?s where {?s a ?class } ");
 
 			pss_sc.setParam("?class", musicclass_sc.get("?class"));
 			QueryExecution qexec1_sc = QueryExecutionFactory.sparqlService(endpoint_sc, pss_sc.toString());
@@ -108,7 +108,7 @@ public class SourceClassTargetMapping {
 				QuerySolution musicclass_tc = classes_tc.next();
 				ParameterizedSparqlString pss_tc = new ParameterizedSparqlString("select ?s where {?s a ?class } ");
 
-				pss_tc.setParam("?class", musicclass_sc.get("?class"));
+				pss_tc.setParam("?class", musicclass_tc.get("?class"));
 				QueryExecution qexec1_tc = QueryExecutionFactory.sparqlService(endpoint_tc, pss_tc.toString());
 
 				ResultSet instances_tc = qexec1_tc.execSelect();
@@ -135,14 +135,18 @@ public class SourceClassTargetMapping {
 
 				// Testing of Wombat //
 
-				MLResults mlm = null;
-				UnsupervisedMLAlgorithm mlu = new UnsupervisedMLAlgorithm(
-						MLAlgorithmFactory.getAlgorithmType("wombat simple"));
+				MLResults mlm;
+				UnsupervisedMLAlgorithm mlu = new UnsupervisedMLAlgorithm(MLAlgorithmFactory.getAlgorithmType("wombat simple"));
 				mlu.init(MlAlgorithmParameters, sourceCache, targetCache);
 				PseudoFMeasure pfm = null;
-				System.out.println("Learned: " + mlm.getLinkSpecification().getFullExpression() + " with threshold: "
-						+ mlm.getLinkSpecification().getThreshold());
-				results = mlu.predict(sourceCache, targetCache, mlm);
+				EvaluatorType pfmType = null;
+				if(pfmType != null)
+				{
+					pfm = (PseudoFMeasure) EvaluatorFactory.create(pfmType);
+				}
+				mlm = mlu.learn(pfm);
+				System.out.println("Learned: " + mlm.getLinkSpecification().getFullExpression() + " with threshold: " + mlm.getLinkSpecification().getThreshold());
+				results = mlu.predict(sourceCache, targetCache, mlm); 
 
 				double sim = results.getNumberofMappings();
 				if (sim > 100) {
