@@ -80,7 +80,7 @@ public class SourceClassTargetMapping3 {
 			QueryExecution qexec1_sc = QueryExecutionFactory.sparqlService(endpoint_sc, pss_sc.toString());
 
 			ResultSet instances_sc = qexec1_sc.execSelect();
-			// System.out.println("Instances of class "+musicclass_sc.get("?class"));
+			 System.out.println("Instances of class "+musicclass_sc.get("?class"));
 			System.out.println("Lists of CLASS NAME --> " + musicclass_sc.get("?class"));
 			while (instances_sc.hasNext()) {
 				QuerySolution musicinstance_sc = instances_sc.next();
@@ -96,8 +96,7 @@ public class SourceClassTargetMapping3 {
 
 					sourceCache.addTriple(musicinstance_sc.get("?s").toString(),
 							musicproperties_sc.get("?p").toString(), musicproperties_sc.get("?o").toString());
-					// System.out.println("Class
-					// -->"+musicclass_sc.get("?class")+"<--sourcecahe-->"+sourceCache);
+					 System.out.println("Class ---"+musicclass_sc.get("?class")+"<--sourcecahe-->"+sourceCache);
 				}
 			}
 			/*----------------------Begining of Target -------------------------------------------- */
