@@ -42,10 +42,9 @@ List of Task Contains
     
 	```
 	SELECT ?p ?o where 
-{
+    {
 	?s ?p ?o {select ?s where {?s a ?class {SELECT DISTINCT ?class WHERE { [] a ?class } ORDER BY ?class} } Limit 100 } 
 	FILTER(isliteral(?o))
-
 	filter(langMatches(lang(?o),"EN"))
 	} 
  ```
